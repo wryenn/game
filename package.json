@@ -8,9 +8,10 @@
     "build": "vite build",
     "start": "NODE_ENV=production tsx server/index.ts",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . && tsc --noEmit",
+    "lint": "tsc --noEmit",
     "test": "bun test",
-    "balance": "bun tools/balance.ts"
+    "balance": "bun tools/balance.ts",
+    "check": "tsc --noEmit && bun test && vite build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

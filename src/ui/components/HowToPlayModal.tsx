@@ -1,15 +1,13 @@
 import React from 'react';
-import { ArrowLeft, LogOut } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { KEYBOARD_SCHEMES } from '../../content/constants';
 
 interface HowToPlayModalProps {
   onBack: () => void;
-  onQuit: () => void;
 }
 
 export const HowToPlayModal: React.FC<HowToPlayModalProps> = ({
   onBack,
-  onQuit,
 }) => {
   return (
     <div className="w-full max-w-4xl mx-auto bg-slate-950/94 border-2 border-amber-500/70 rounded-none pixel-panel p-6 md:p-8 text-amber-50 max-h-[88vh] overflow-y-auto">
@@ -32,15 +30,6 @@ export const HowToPlayModal: React.FC<HowToPlayModalProps> = ({
             </p>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={onQuit}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-none bg-rose-950/90 hover:bg-rose-900 border-2 border-rose-500 text-xs font-display font-bold text-rose-100 cursor-pointer pixel-btn"
-        >
-          <LogOut className="w-4 h-4" />
-          Çıkış
-        </button>
       </div>
 
       {/* Gameplay Mechanics & Scoring */}

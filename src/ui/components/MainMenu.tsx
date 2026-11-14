@@ -321,7 +321,6 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             onStartLevel={onStartSagaLevel}
             onClaimMilestone={onClaimSagaMilestone}
             onBack={() => onSetSubView('home')}
-            onQuit={handleRequestQuit}
           />
         )}
 
@@ -331,7 +330,6 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             storyProgress={storyProgress}
             onUpdateSettings={onUpdateSettings}
             onBack={() => onSetSubView('home')}
-            onQuit={handleRequestQuit}
             onPlay={onStartGame}
           />
         )}
@@ -348,7 +346,6 @@ export const MainMenu: React.FC<MainMenuProps> = ({
               onUpdateSettings({ botsEnabled })
             }
             onBack={() => onSetSubView('home')}
-            onQuit={handleRequestQuit}
             onPlay={onStartGame}
           />
         )}
@@ -361,7 +358,6 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             onSelectChoice={onSelectStoryChoice}
             onStartChapter={onStartStoryChapter}
             onBack={() => onSetSubView('home')}
-            onQuit={handleRequestQuit}
           />
         )}
 
@@ -373,7 +369,6 @@ export const MainMenu: React.FC<MainMenuProps> = ({
           <AchievementsModal
             achievementState={achievementState}
             onBack={() => onSetSubView('home')}
-            onQuit={handleRequestQuit}
           />
         )}
 
@@ -382,14 +377,12 @@ export const MainMenu: React.FC<MainMenuProps> = ({
             settings={settings}
             onUpdateSettings={onUpdateSettings}
             onBack={() => onSetSubView('home')}
-            onQuit={handleRequestQuit}
           />
         )}
 
         {subView === 'howto' && (
           <HowToPlayModal
             onBack={() => onSetSubView('home')}
-            onQuit={handleRequestQuit}
           />
         )}
       </div>

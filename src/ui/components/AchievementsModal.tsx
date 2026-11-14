@@ -1,18 +1,16 @@
 import React from 'react';
-import { ArrowLeft, Award, Lock, LogOut, Trophy } from 'lucide-react';
+import { ArrowLeft, Award, Lock, Trophy } from 'lucide-react';
 import { ACHIEVEMENTS } from '../../content/constants';
 import { AchievementState } from '../../sim/types';
 
 interface AchievementsModalProps {
   achievementState: AchievementState;
   onBack: () => void;
-  onQuit: () => void;
 }
 
 export const AchievementsModal: React.FC<AchievementsModalProps> = ({
   achievementState,
   onBack,
-  onQuit,
 }) => {
   const unlockedSet = new Set(achievementState.unlockedIds);
 
@@ -38,15 +36,6 @@ export const AchievementsModal: React.FC<AchievementsModalProps> = ({
             </p>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={onQuit}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-none bg-rose-950/90 hover:bg-rose-900 border-2 border-rose-500 text-xs font-display font-bold text-rose-100 cursor-pointer pixel-btn"
-        >
-          <LogOut className="w-4 h-4" />
-          Çıkış
-        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 mt-5">

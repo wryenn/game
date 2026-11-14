@@ -3,7 +3,6 @@ import {
   ArrowLeft,
   Gamepad2,
   Keyboard,
-  LogOut,
   RotateCcw,
   Volume2,
   VolumeX,
@@ -19,7 +18,6 @@ interface SettingsModalProps {
   settings: GameSettings;
   onUpdateSettings: (patch: Partial<GameSettings>) => void;
   onBack: () => void;
-  onQuit: () => void;
 }
 
 type BindAction = keyof PlayerKeyBindings;
@@ -36,7 +34,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   settings,
   onUpdateSettings,
   onBack,
-  onQuit,
 }) => {
   const { audio } = settings;
   const controls: ControlsConfig = settings.controls ?? DEFAULT_CONTROLS;
@@ -117,15 +114,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </p>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={onQuit}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-none bg-rose-950/90 hover:bg-rose-900 border-2 border-rose-500 text-xs font-display font-bold text-rose-100 cursor-pointer pixel-btn"
-        >
-          <LogOut className="w-4 h-4" />
-          Çıkış
-        </button>
       </div>
 
       <div className="mt-5 space-y-6">

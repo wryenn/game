@@ -12,3 +12,13 @@ describe('AI regression', () => {
     expect(selfKos / Math.max(1, deaths)).toBeLessThan(0.2);
   }, 60000);
 });
+
+describe('hero balance regression', () => {
+  test('no hero dominates or collapses in mixed bot matches', () => {
+    const r = runBalance({ matches: 200, difficulty: 'hard', personality: 'mixed', maps: ['classic', 'towers', 'crumbling', 'hazard'], maxSeconds: 90 });
+    for (const [hero, s] of Object.entries(r.heroes)) {
+      const winRate = s.wins / s.games;
+      expect({ hero, ok: winRate > 0.1 && winRate < 0.42 }).toEqual({ hero, ok: true });
+    }
+  }, 120000);
+});

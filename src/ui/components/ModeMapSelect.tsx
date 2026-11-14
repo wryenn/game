@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Lock, LogOut, Play } from 'lucide-react';
+import { ArrowLeft, Lock, Play } from 'lucide-react';
 import { GAME_MAPS, GAME_MODES } from '../../content/constants';
 import { GameModeId, GameSettings, MapId, StoryProgress } from '../../sim/types';
 
@@ -8,7 +8,6 @@ interface ModeMapSelectProps {
   storyProgress: StoryProgress;
   onUpdateSettings: (patch: Partial<GameSettings>) => void;
   onBack: () => void;
-  onQuit: () => void;
   onPlay: () => void;
 }
 
@@ -77,7 +76,6 @@ export const ModeMapSelect: React.FC<ModeMapSelectProps> = ({
   storyProgress,
   onUpdateSettings,
   onBack,
-  onQuit,
   onPlay,
 }) => {
   const selectMode = (mode: GameModeId) => onUpdateSettings({ mode });
@@ -114,15 +112,6 @@ export const ModeMapSelect: React.FC<ModeMapSelectProps> = ({
           >
             <Play className="w-4 h-4 fill-current" />
             Savaşı Başlat
-          </button>
-
-          <button
-            type="button"
-            onClick={onQuit}
-            className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-none bg-rose-950/90 hover:bg-rose-900 border-2 border-rose-500 text-xs font-display font-bold text-rose-100 cursor-pointer pixel-btn"
-          >
-            <LogOut className="w-4 h-4" />
-            Çıkış
           </button>
         </div>
       </div>

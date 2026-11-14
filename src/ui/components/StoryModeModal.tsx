@@ -6,7 +6,6 @@ import {
   ChevronRight,
   Compass,
   Lock,
-  LogOut,
   Play,
   Sparkles,
   Swords,
@@ -26,7 +25,6 @@ interface StoryModeModalProps {
   onSelectChoice: (chapter: StoryChapterDef, choice: StoryChoiceOption) => void;
   onStartChapter: (chapter: StoryChapterDef, bonusLives: number) => void;
   onBack: () => void;
-  onQuit: () => void;
 }
 
 export const StoryModeModal: React.FC<StoryModeModalProps> = ({
@@ -36,7 +34,6 @@ export const StoryModeModal: React.FC<StoryModeModalProps> = ({
   onSelectChoice,
   onStartChapter,
   onBack,
-  onQuit,
 }) => {
   const [selectedId, setSelectedId] = useState<number>(() => {
     if (postVictoryChapterId) return postVictoryChapterId;
@@ -185,15 +182,6 @@ export const StoryModeModal: React.FC<StoryModeModalProps> = ({
           >
             <BookOpen className="w-4 h-4" />
             Kadim Sırlar ({progress.secretsFound.length})
-          </button>
-
-          <button
-            type="button"
-            onClick={onQuit}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-none bg-rose-950/90 hover:bg-rose-900 border-2 border-rose-500 text-xs font-display font-bold text-rose-100 cursor-pointer pixel-btn"
-          >
-            <LogOut className="w-4 h-4" />
-            Çıkış
           </button>
         </div>
       </div>
