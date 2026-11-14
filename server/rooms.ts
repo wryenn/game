@@ -209,6 +209,12 @@ export class Room {
       countdownSec: 3,
       seed: hashSeed(`${this.code}:${Date.now()}`),
     };
+    for (const p of this.peers.values()) {
+      p.inputSeq = 0;
+      p.inputBits = 0;
+      p.latchedJump = false;
+      p.latchedAbility = false;
+    }
     this.match = new Match(this, config, slots);
     for (const p of this.peers.values()) {
       send(p.ws, { t: 'match_start', match: { config, slots, yourSlot: p.slotIndex } });
