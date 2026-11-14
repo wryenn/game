@@ -165,6 +165,7 @@ export default function App() {
 
   const finalizeRound = useCallback(
     (raw: RoundResult) => {
+      sessionRef.current?.stop();
       soundEngine.stopMusic();
       soundEngine.playVictoryFanfare();
       const active = activeRef.current;
@@ -276,7 +277,9 @@ export default function App() {
       onRoom: setRoom,
       onError: setOnlineError,
       onPing: setPingMs,
-      onMatchStart: (m) => beginOnlineRef.current(m),
+      onMatchStart: (m) => {
+        if (screenRef.current !== 'exited') beginOnlineRef.current(m);
+      },
       onMatchEnd: (r) => {
         if (activeRef.current.kind === 'online') finalizeRef.current(r);
       },
@@ -432,6 +435,10 @@ export default function App() {
             startMatch({ kind: 'story', chapter, bonusLives });
           }}
           onQuitApp={() => {
+            if (clientRef.current.room) {
+              clientRef.current.leaveRoom();
+              setRoom(null);
+            }
             sessionRef.current?.stop();
             soundEngine.stopMusic();
             go('exited');
