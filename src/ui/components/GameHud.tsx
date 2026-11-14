@@ -141,7 +141,7 @@ export const GameHud: React.FC<GameHudProps> = ({
   return (
     <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-1.5 sm:p-3 pt-[max(0.375rem,env(safe-area-inset-top))] pb-[max(0.375rem,env(safe-area-inset-bottom))]">
       <div className="flex items-start gap-1.5">
-        <div className="flex-1 min-w-0 flex gap-1 sm:gap-1.5 flex-wrap sm:flex-nowrap">
+        <div className="flex-1 min-w-0 grid grid-cols-2 gap-1 sm:flex sm:gap-1.5">
           {hud.players.map((p) => (
             <PlayerChip key={p.slotIndex} p={p} lives={lives} isMe={p.slotIndex === localSlot && !p.isBot} />
           ))}
@@ -188,6 +188,12 @@ export const GameHud: React.FC<GameHudProps> = ({
       )}
 
       <div className="flex-1" />
+
+      {touchControlsEnabled && (
+        <div className="hidden portrait:block self-center mb-2 text-[11px] text-amber-100/80 bg-slate-950/70 px-2 py-1 border border-slate-700">
+          Daha geniş görüş için telefonu yatay çevir
+        </div>
+      )}
 
       {achievementToasts.length > 0 && (
         <div className="flex flex-col items-center gap-1.5 mb-2">

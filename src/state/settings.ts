@@ -16,6 +16,8 @@ export function mergeSettings(raw: Partial<GameSettings> | undefined): GameSetti
     audio: { ...DEFAULT_SETTINGS.audio, ...(s.audio ?? {}) },
     controls: {
       ...DEFAULT_SETTINGS.controls,
+      touchControlsEnabled:
+        typeof window !== 'undefined' && !!window.matchMedia?.('(pointer: coarse)').matches,
       ...(s.controls ?? {}),
       p1: { ...DEFAULT_SETTINGS.controls.p1, ...(s.controls?.p1 ?? {}) },
       p2: { ...DEFAULT_SETTINGS.controls.p2, ...(s.controls?.p2 ?? {}) },

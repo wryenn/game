@@ -62,6 +62,8 @@ class SoundEngine {
   }
 
   public unlock() {
+    const activation = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation;
+    if (activation && !activation.hasBeenActive) return;
     this.unlocked = true;
     this.ensureContext();
   }

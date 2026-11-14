@@ -169,7 +169,7 @@ async function startServer() {
 
   if (!isProd) {
     const { createServer: createViteServer } = await import('vite');
-    const vite = await createViteServer({ server: { middlewareMode: true, hmr: { server } }, appType: 'spa' });
+    const vite = await createViteServer({ server: { middlewareMode: true }, appType: 'spa' });
     app.use(vite.middlewares);
   } else {
     const distDir = path.resolve(import.meta.dirname, '..', 'dist');

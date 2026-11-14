@@ -457,7 +457,9 @@ export class CastleRenderer {
     const drawW = Math.round(ARENA_WIDTH * scale);
     const drawH = Math.round(ARENA_HEIGHT * scale);
     const offsetX = Math.round((canvasWidth - drawW) / 2);
-    const offsetY = Math.round((canvasHeight - drawH) / 2);
+    // Portrait screens: lift the arena so the thumb zone below stays free for touch controls.
+    const spareY = canvasHeight - drawH;
+    const offsetY = Math.round(spareY > drawH * 0.4 ? spareY * 0.32 : spareY / 2);
 
     // Seamless sky & moat margins for non-16:9 screens (e.g., 1440x900 16:10)
     ctx.fillStyle = this.getSkyTopColor(sim.mapId);
