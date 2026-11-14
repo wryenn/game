@@ -1,18 +1,16 @@
 import React from 'react';
-import { Home, LogOut, Play, RotateCcw } from 'lucide-react';
+import { Home, Play, RotateCcw } from 'lucide-react';
 
 interface PauseModalProps {
   onResume: () => void;
   onRestart: () => void;
   onMainMenu: () => void;
-  onQuit: () => void;
 }
 
 export const PauseModal: React.FC<PauseModalProps> = ({
   onResume,
   onRestart,
   onMainMenu,
-  onQuit,
 }) => {
   return (
     <div className="fixed inset-0 z-30 bg-slate-950/75 flex items-center justify-center p-4">
@@ -58,15 +56,6 @@ export const PauseModal: React.FC<PauseModalProps> = ({
           >
             <Home className="w-4 h-4" />
             Ana Menüye Dön
-          </button>
-
-          <button
-            type="button"
-            onClick={onQuit}
-            className="w-full py-2.5 px-4 rounded-none bg-rose-950/90 hover:bg-rose-900 border-2 border-rose-500 text-rose-100 font-display font-bold text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-colors pixel-btn"
-          >
-            <LogOut className="w-4 h-4" />
-            Oyundan Çık
           </button>
         </div>
       </div>

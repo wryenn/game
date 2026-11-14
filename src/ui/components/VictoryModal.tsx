@@ -3,7 +3,6 @@ import {
   Award,
   Compass,
   Home,
-  LogOut,
   Map as MapIcon,
   RotateCcw,
   Sparkles,
@@ -20,20 +19,20 @@ interface VictoryModalProps {
   result: RoundResult;
   onPlayAgain: () => void;
   onMainMenu: () => void;
-  onQuit: () => void;
   onContinueStory?: () => void;
   onOpenSagaMap?: () => void;
-  isOnlineGuest?: boolean;
+  isOnline?: boolean;
+  canRematch?: boolean;
 }
 
 export const VictoryModal: React.FC<VictoryModalProps> = ({
   result,
   onPlayAgain,
   onMainMenu,
-  onQuit,
   onContinueStory,
   onOpenSagaMap,
-  isOnlineGuest = false,
+  isOnline = false,
+  canRematch = true,
 }) => {
   const winner =
     result.standings.find((p) => p.slotIndex === result.winnerSlot) ??
@@ -227,7 +226,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
               <Compass className="w-4 h-4" />
               Hikâyeye Devam
             </button>
-          ) : !isOnlineGuest ? (
+          ) : canRematch ? (
             <button
               type="button"
               onClick={onPlayAgain}
@@ -250,15 +249,6 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
           >
             <Home className="w-4 h-4" />
             Ana Menü
-          </button>
-
-          <button
-            type="button"
-            onClick={onQuit}
-            className="py-3 px-4 rounded-none bg-rose-950/90 hover:bg-rose-900 border-2 border-rose-500 text-rose-100 font-display font-bold text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-colors pixel-btn"
-          >
-            <LogOut className="w-4 h-4" />
-            Çıkış
           </button>
         </div>
       </div>

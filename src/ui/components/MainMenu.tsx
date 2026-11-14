@@ -37,7 +37,6 @@ import { CharacterPreviewSvg } from './CharacterPreviewSvg';
 import { CharacterSelect } from './CharacterSelect';
 import { HowToPlayModal } from './HowToPlayModal';
 import { ModeMapSelect } from './ModeMapSelect';
-import { OnlineLobbyModal } from './OnlineLobbyModal';
 import { SagaMapModal } from './SagaMapModal';
 import { SettingsModal } from './SettingsModal';
 import { StoryModeModal } from './StoryModeModal';
@@ -51,11 +50,6 @@ interface MainMenuProps {
   progression: PlayerProgression;
   achievementState: AchievementState;
   postVictoryChapterId: number | null;
-  onlineRoom: OnlineRoomState | null;
-  onlinePeerId: string | null;
-  onlineError: string | null;
-  onlineHasTurn: boolean;
-  initialRoomCode: string;
   onSetSubView: (view: MenuSubView) => void;
   onUpdateSettings: (patch: Partial<GameSettings>) => void;
   onUpdateSlot: (slotIndex: number, patch: Partial<PlayerSlotConfig>) => void;
@@ -65,20 +59,8 @@ interface MainMenuProps {
   onDismissStoryVictory: () => void;
   onSelectStoryChoice: (chapter: StoryChapterDef, choice: StoryChoiceOption) => void;
   onStartStoryChapter: (chapter: StoryChapterDef, bonusLives: number) => void;
-  onCreateOnlineRoom: (name: string, costume: CostumeConfig) => Promise<void>;
-  onJoinOnlineRoom: (code: string, name: string, costume: CostumeConfig) => Promise<void>;
-  onUpdateOnlineProfile: (name: string, costume: CostumeConfig) => void;
-  onUpdateOnlineRoomConfig: (patch: {
-    mode?: GameModeId;
-    mapId?: MapId;
-    lives?: number;
-    roundDurationSec?: number;
-    botsEnabled?: boolean;
-  }) => void;
-  onStartOnlineMatch: () => void;
-  onLeaveOnlineRoom: () => void;
-  onClearOnlineError: () => void;
   onQuitApp: () => void;
+  onlineLobby: React.ReactNode;
 }
 
 export const MainMenu: React.FC<MainMenuProps> = ({
@@ -90,11 +72,6 @@ export const MainMenu: React.FC<MainMenuProps> = ({
   progression,
   achievementState,
   postVictoryChapterId,
-  onlineRoom,
-  onlinePeerId,
-  onlineError,
-  onlineHasTurn,
-  initialRoomCode,
   onSetSubView,
   onUpdateSettings,
   onUpdateSlot,
@@ -104,14 +81,8 @@ export const MainMenu: React.FC<MainMenuProps> = ({
   onDismissStoryVictory,
   onSelectStoryChoice,
   onStartStoryChapter,
-  onCreateOnlineRoom,
-  onJoinOnlineRoom,
-  onUpdateOnlineProfile,
-  onUpdateOnlineRoomConfig,
-  onStartOnlineMatch,
-  onLeaveOnlineRoom,
-  onClearOnlineError,
   onQuitApp,
+  onlineLobby,
 }) => {
   const [confirmQuitOpen, setConfirmQuitOpen] = useState(false);
 
@@ -339,15 +310,6 @@ export const MainMenu: React.FC<MainMenuProps> = ({
                 <HelpCircle className="w-4 h-4 text-amber-400" />
                 NASIL OYNANIR
               </button>
-
-              <button
-                type="button"
-                onClick={handleRequestQuit}
-                className="py-2.5 px-4 rounded-none bg-rose-950/80 hover:bg-rose-900 border-2 border-rose-600 text-rose-100 font-display font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer pixel-btn"
-              >
-                <LogOut className="w-4 h-4 text-rose-300" />
-                OYUNDAN ÇIK
-              </button>
             </div>
           </div>
         )}
@@ -404,26 +366,7 @@ export const MainMenu: React.FC<MainMenuProps> = ({
         )}
 
         {subView === 'online' && (
-          <OnlineLobbyModal
-            room={onlineRoom}
-            myPeerId={onlinePeerId}
-            onlineError={onlineError}
-            hasTurn={onlineHasTurn}
-            initialRoomCode={initialRoomCode}
-            defaultName={slots[0]?.name ?? 'Pofi'}
-            defaultCostume={slots[0]?.costume}
-            settings={settings}
-            storyProgress={storyProgress}
-            onCreateRoom={onCreateOnlineRoom}
-            onJoinRoom={onJoinOnlineRoom}
-            onUpdateProfile={onUpdateOnlineProfile}
-            onUpdateRoomConfig={onUpdateOnlineRoomConfig}
-            onStartMatch={onStartOnlineMatch}
-            onLeaveRoom={onLeaveOnlineRoom}
-            onClearError={onClearOnlineError}
-            onBack={() => onSetSubView('home')}
-            onQuit={handleRequestQuit}
-          />
+          onlineLobby
         )}
 
         {subView === 'achievements' && (
