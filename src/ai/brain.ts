@@ -360,7 +360,7 @@ export class BotBrain {
         fire = Math.abs(dy) < 40 && Math.abs(dx) < 230 && facingTarget && safeDash(bot.facing * 760, -130);
         break;
       case 'wind_blink':
-        fire = Math.abs(dy) < 50 && Math.abs(dx) < 150 && facingTarget && safeDash(bot.facing * 680, -230);
+        fire = Math.abs(dy) < 60 && Math.abs(dx) < 175 && facingTarget && safeDash(bot.facing * 680, -230);
         break;
       case 'flame_burst':
         fire = near(165) >= 1;
@@ -373,7 +373,7 @@ export class BotBrain {
         break;
       case 'shadow_warp': {
         const landing = platformBelow(sim, cx + bot.facing * 165, bot.y + bot.h - 4, 260);
-        fire = facingTarget && Math.abs(dx) > 110 && Math.abs(dx) < 210 && Math.abs(dy) < 60 && !!landing;
+        fire = facingTarget && Math.abs(dx) > 90 && Math.abs(dx) < 240 && Math.abs(dy) < 80 && !!landing;
         break;
       }
       case 'gold_quake': {

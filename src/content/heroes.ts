@@ -17,7 +17,7 @@ export const HEROES: HeroDef[] = [
     unlockLevel: 1,
     abilityName: 'Hamur Sıçrayışı',
     abilityDesc: 'Yüksek bir yay çizerek yukarı fırlar ve altındakileri sarsar.',
-    abilityCooldown: 3.5,
+    abilityCooldown: 4.0,
     abilityKind: 'high_spring',
     stats: {
       speedMult: 1.0,
@@ -70,9 +70,9 @@ export const HEROES: HeroDef[] = [
     stats: {
       speedMult: 1.2,
       jumpMult: 1.0,
-      weightMult: 1.0,
+      weightMult: 1.04,
       maxJumps: 3,
-      stompPower: 1.05,
+      stompPower: 1.15,
     },
     defaultCostume: {
       colorId: 'emerald',
@@ -94,9 +94,9 @@ export const HEROES: HeroDef[] = [
     stats: {
       speedMult: 1.02,
       jumpMult: 1.0,
-      weightMult: 1.1,
+      weightMult: 1.14,
       maxJumps: 2,
-      stompPower: 1.25,
+      stompPower: 1.31,
     },
     defaultCostume: {
       colorId: 'crimson',
@@ -167,9 +167,9 @@ export const HEROES: HeroDef[] = [
     stats: {
       speedMult: 1.12,
       jumpMult: 1.05,
-      weightMult: 1.04,
+      weightMult: 1.12,
       maxJumps: 2,
-      stompPower: 1.2,
+      stompPower: 1.26,
     },
     defaultCostume: {
       colorId: 'plum',
@@ -186,12 +186,12 @@ export const HEROES: HeroDef[] = [
     unlockLevel: 8,
     abilityName: 'Altın Depremi',
     abilityDesc: 'Havadaysa yıldırım hızıyla dalar; yere değdiği an dev altın şok dalgası yayar.',
-    abilityCooldown: 6.5,
+    abilityCooldown: 6.0,
     abilityKind: 'gold_quake',
     stats: {
       speedMult: 1.04,
       jumpMult: 1.04,
-      weightMult: 1.08,
+      weightMult: 1.13,
       maxJumps: 2,
       iceImmune: true,
       stompPower: 1.05,

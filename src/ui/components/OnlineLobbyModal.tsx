@@ -46,7 +46,7 @@ function HeroPicker({ profile, progression, onChange }: { profile: Profile; prog
             className={`flex flex-col items-center p-1 border-2 min-h-16 ${active ? 'border-amber-400 bg-amber-900/40' : 'border-slate-700 bg-slate-900/70'} ${locked ? 'opacity-40' : 'cursor-pointer hover:border-amber-200'}`}
           >
             <CharacterPreviewSvg costume={h.defaultCostume} size={36} />
-            <span className="text-[10px] leading-tight font-bold text-amber-50 truncate w-full text-center">{h.name}</span>
+            <span className="text-[10px] leading-tight font-bold text-amber-50 w-full text-center break-words line-clamp-2">{h.name}</span>
           </button>
         );
       })}

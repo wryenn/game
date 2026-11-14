@@ -116,8 +116,8 @@ export function triggerHeroAbility(char: CharacterEntity, sim: SimulationState) 
         if (other === char || !other.alive || other.invulnTimer > 0 || areAllies(sim, char, other)) continue;
         const dx = other.x + other.w / 2 - cx;
         const dy = other.y + other.h / 2 - cy;
-        if (Math.sign(dx) === char.facing && Math.abs(dx) < 150 && Math.abs(dy) < 60) {
-          other.vx += (char.facing * 540) / getHeroDef(other.heroId).stats.weightMult;
+        if (Math.sign(dx) === char.facing && Math.abs(dx) < 170 && Math.abs(dy) < 64) {
+          other.vx += (char.facing * 590) / getHeroDef(other.heroId).stats.weightMult;
           other.vy = Math.min(other.vy, -200);
           other.lastHitBy = char.slotIndex;
           other.lastHitTimer = PHYSICS.KILL_CREDIT_WINDOW;
