@@ -5,7 +5,13 @@ import { createSimulation, stepSimulation, buildRoundResult } from './physics';
 import { computeBotInput } from './ai';
 import { evaluateLiveAchievements, evaluateRoundEndAchievements } from './achievements';
 import { computeLevelFromXp } from './characters';
-import { computeSagaStarsEarned } from './saga';
+import {
+  applySagaLevelCompletion,
+  computeSagaStarsEarned,
+  createInitialSagaProgress,
+  isSagaLevelUnlocked,
+  SAGA_LEVELS,
+} from './saga';
 import { computeEndingFromCounts, STORY_CHAPTERS } from './story';
 import { AchievementId, GameSettings, PlayerInputState, PlayerSlotConfig } from './types';
 
@@ -363,7 +369,7 @@ test('smart AI brakes before walking off a platform edge', () => {
   assert.equal(input.right, false);
 });
 
-test('XP level progression and Saga 1-3 star computation work deterministically', () => {
+test('XP level progression and branching Saga roadmap unlocks work deterministically', () => {
   assert.equal(computeLevelFromXp(0).level, 1);
   assert.equal(computeLevelFromXp(100).level, 2);
   assert.equal(computeLevelFromXp(260).level, 3);
@@ -372,6 +378,31 @@ test('XP level progression and Saga 1-3 star computation work deterministically'
   assert.equal(computeSagaStarsEarned(0, 30, true), 3);
   assert.equal(computeSagaStarsEarned(1, 80, true), 2);
   assert.equal(computeSagaStarsEarned(2, 40, true), 1);
+
+  // Branching graph checks: every level references valid nextIds & mapPos
+  for (const lvl of SAGA_LEVELS) {
+    assert.ok(lvl.mapPos.x >= 15 && lvl.mapPos.x <= 85);
+    for (const nextId of lvl.nextIds) {
+      assert.ok(SAGA_LEVELS.some((l) => l.id === nextId), `valid nextId ${nextId}`);
+    }
+  }
+
+  let prog = createInitialSagaProgress();
+  assert.equal(isSagaLevelUnlocked(1, prog), true);
+  assert.equal(isSagaLevelUnlocked(2, prog), false);
+
+  prog = applySagaLevelCompletion(prog, 1, 3);
+  assert.equal(isSagaLevelUnlocked(2, prog), true);
+
+  // Level 2 forks into both Level 3 (main) and Level 4 (side branch)
+  prog = applySagaLevelCompletion(prog, 2, 2);
+  assert.equal(isSagaLevelUnlocked(3, prog), true, 'main branch 3 should unlock');
+  assert.equal(isSagaLevelUnlocked(4, prog), true, 'side branch 4 should unlock');
+  assert.equal(isSagaLevelUnlocked(5, prog), false);
+
+  // Completing side branch 4 unlocks boss 5
+  prog = applySagaLevelCompletion(prog, 4, 3);
+  assert.equal(isSagaLevelUnlocked(5, prog), true, 'boss 5 should unlock from side branch 4');
 });
 
 

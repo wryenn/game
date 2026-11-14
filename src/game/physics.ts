@@ -56,7 +56,16 @@ export function createSimulation(
     return {
       slotIndex: slot.slotIndex,
       heroId: hero.id,
-      name: slot.name,
+      name:
+        slot.kind === 'bot'
+          ? !slot.name ||
+            slot.name === 'Tıknaz Ali' ||
+            slot.name === 'Murat' ||
+            slot.name === 'Hayri' ||
+            slot.name.startsWith('Bot')
+            ? `Bot ${slot.slotIndex}`
+            : slot.name
+          : slot.name,
       isBot: slot.kind === 'bot',
       aiPersonality: slot.aiPersonality,
       team: slot.team,

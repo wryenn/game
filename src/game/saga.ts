@@ -1,12 +1,14 @@
 import { SagaLevelDef, SagaProgress } from './types';
 
-const SAGA_STORAGE_KEY = 'kale_kapmaca_saga_v1';
+const SAGA_STORAGE_KEY = 'kale_kapmaca_saga_v2';
 
 export const SAGA_MILESTONES = [
   { stars: 6, label: 'Bronz Sandık (+150 XP)', rewardXp: 150 },
   { stars: 15, label: 'Gümüş Sandık (+300 XP)', rewardXp: 300 },
   { stars: 30, label: 'Altın Hükümdar Sandığı (+600 XP)', rewardXp: 600 },
 ];
+
+export const SAGA_MAX_ROW = 10;
 
 export const SAGA_LEVELS: SagaLevelDef[] = [
   {
@@ -17,6 +19,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'story_origin',
     mode: 'saga',
     lives: 3,
+    branchKind: 'main',
+    branchLabel: 'Başlangıç',
+    nextIds: [2],
+    mapPos: { x: 50, row: 0 },
     objectiveText: 'Hedef: 2 Kafa Ezme',
     star2Hint: '50+ Puan ile kazan',
     star3Hint: 'Hiç düşmeden (0 ölüm) kazan',
@@ -33,12 +39,16 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
   },
   {
     id: 2,
-    title: '2. İkiz Kule Sıçrayışı',
+    title: '2. İkiz Kule Kavşağı',
     worldName: 'Şekerli Avlu',
     worldColor: '#14D8C4',
     mapId: 'classic',
     mode: 'saga',
     lives: 3,
+    branchKind: 'main',
+    branchLabel: 'Yol Ayrımı',
+    nextIds: [3, 4],
+    mapPos: { x: 50, row: 1 },
     objectiveText: 'Hedef: 50 Puan veya Rakibi Ele',
     star2Hint: '75+ Puan topla',
     star3Hint: 'Hiç düşmeden kazan',
@@ -61,8 +71,12 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'towers',
     mode: 'saga',
     lives: 3,
+    branchKind: 'main',
+    branchLabel: 'Ana Yol',
+    nextIds: [5],
+    mapPos: { x: 26, row: 2 },
     objectiveText: 'Hedef: 3 Kafa Ezme',
-    star2Hint: '2 Can ile bitir',
+    star2Hint: '2+ Can ile bitir',
     star3Hint: '0 Ölüm ile bitir',
     rewardXp: 110,
     rule: { chapterId: 103, title: 'Rüzgarlı Köprü', objectiveLabel: 'Hedef: 3 Kafa Ezme', targetStomps: 3 },
@@ -89,10 +103,14 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'towers',
     mode: 'saga',
     lives: 3,
+    branchKind: 'side',
+    branchLabel: 'Yan Dal',
+    nextIds: [5],
+    mapPos: { x: 74, row: 2 },
     objectiveText: 'Hedef: Tüm Rakipleri Ele',
     star2Hint: '80+ Puan topla',
     star3Hint: '0 Ölüm ile bitir',
-    rewardXp: 120,
+    rewardXp: 125,
     rule: { chapterId: 104, title: 'Boğaz Geçidi', objectiveLabel: 'Hedef: Rakipleri Ele' },
     rivals: [
       {
@@ -112,6 +130,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mode: 'saga',
     lives: 3,
     isBoss: true,
+    branchKind: 'boss',
+    branchLabel: 'Şef Kapısı',
+    nextIds: [6],
+    mapPos: { x: 50, row: 3 },
     objectiveText: 'BOSS: 4 Kafa Ezme veya Eleme',
     star2Hint: '100+ Puan topla',
     star3Hint: '0 Ölüm ile Şef’i yen',
@@ -141,8 +163,12 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mode: 'saga',
     lives: 3,
     roundDurationSec: 30,
+    branchKind: 'main',
+    branchLabel: 'Yol Ayrımı',
+    nextIds: [7, 8],
+    mapPos: { x: 38, row: 4 },
     objectiveText: 'Hedef: Buzda 30sn Dayan',
-    star2Hint: '2+ Can ile tamamla',
+    star2Hint: '70+ Puan topla',
     star3Hint: '0 Ölüm ile tamamla',
     rewardXp: 135,
     rule: {
@@ -169,6 +195,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'story_frost',
     mode: 'saga',
     lives: 3,
+    branchKind: 'main',
+    branchLabel: 'Ana Yol',
+    nextIds: [9],
+    mapPos: { x: 24, row: 5 },
     objectiveText: 'Hedef: 80 Puan veya Eleme',
     star2Hint: '100+ Puan topla',
     star3Hint: '0 Ölüm ile bitir',
@@ -197,6 +227,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'crumbling',
     mode: 'saga',
     lives: 3,
+    branchKind: 'side',
+    branchLabel: 'Yan Dal',
+    nextIds: [9],
+    mapPos: { x: 74, row: 5 },
     objectiveText: 'Hedef: Tüm Rakipleri Ele',
     star2Hint: '90+ Puan topla',
     star3Hint: '0 Ölüm ile bitir',
@@ -225,6 +259,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'story_lost',
     mode: 'saga',
     lives: 3,
+    branchKind: 'main',
+    branchLabel: 'Ana Yol',
+    nextIds: [10],
+    mapPos: { x: 56, row: 6 },
     objectiveText: 'Hedef: 4 Kafa Ezme',
     star2Hint: '80+ Puan topla',
     star3Hint: '0 Ölüm ile bitir',
@@ -254,6 +292,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mode: 'saga',
     lives: 3,
     isBoss: true,
+    branchKind: 'boss',
+    branchLabel: 'Şef & Çatal',
+    nextIds: [11, 12],
+    mapPos: { x: 46, row: 7 },
     objectiveText: 'BOSS: Top Ateşinde Kızıl Bey’i Yen',
     star2Hint: '110+ Puan topla',
     star3Hint: '0 Ölüm ile Şef’i yen',
@@ -287,6 +329,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'story_crimson',
     mode: 'saga',
     lives: 3,
+    branchKind: 'main',
+    branchLabel: 'Batı Kanadı',
+    nextIds: [13],
+    mapPos: { x: 25, row: 8 },
     objectiveText: 'Hedef: 100 Puan veya Eleme',
     star2Hint: '120+ Puan topla',
     star3Hint: '0 Ölüm ile bitir',
@@ -321,6 +367,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'story_shadow',
     mode: 'saga',
     lives: 3,
+    branchKind: 'side',
+    branchLabel: 'Doğu Kanadı',
+    nextIds: [14],
+    mapPos: { x: 75, row: 8 },
     objectiveText: 'Hedef: Vezir’i ve İkizini Yen',
     star2Hint: '120+ Puan topla',
     star3Hint: '0 Ölüm ile bitir',
@@ -349,6 +399,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'story_tournament',
     mode: 'saga',
     lives: 4,
+    branchKind: 'main',
+    branchLabel: 'Batı Kapısı',
+    nextIds: [15],
+    mapPos: { x: 31, row: 9 },
     objectiveText: 'Leyla ile Turnuvayı Kazan',
     star2Hint: '120+ Puan topla',
     star3Hint: '0 Ölüm ile bitir',
@@ -383,6 +437,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mapId: 'story_golden',
     mode: 'saga',
     lives: 4,
+    branchKind: 'side',
+    branchLabel: 'Doğu Kapısı',
+    nextIds: [15],
+    mapPos: { x: 69, row: 9 },
     objectiveText: 'Hedef: 5 Kafa Ezme',
     star2Hint: '130+ Puan topla',
     star3Hint: '0 Ölüm ile bitir',
@@ -412,6 +470,10 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
     mode: 'saga',
     lives: 4,
     isBoss: true,
+    branchKind: 'boss',
+    branchLabel: 'Taht Salonu',
+    nextIds: [],
+    mapPos: { x: 50, row: 10 },
     objectiveText: 'BÜYÜK FİNAL: Altın Hakan’ı Alt Et',
     star2Hint: '150+ Puan topla',
     star3Hint: '0 Ölüm ile Efsane Ol!',
@@ -442,19 +504,93 @@ export const SAGA_LEVELS: SagaLevelDef[] = [
 export function createInitialSagaProgress(): SagaProgress {
   return {
     highestUnlockedLevel: 1,
+    unlockedLevelIds: [1],
+    completedLevelIds: [],
     starsByLevel: {},
     claimedMilestones: [],
   };
 }
 
+export function isSagaLevelUnlocked(
+  levelId: number,
+  progress: SagaProgress
+): boolean {
+  if (levelId === 1) return true;
+  if (progress.unlockedLevelIds?.includes(levelId)) return true;
+  return levelId <= (progress.highestUnlockedLevel || 1);
+}
+
+export function getActiveFrontierLevelId(progress: SagaProgress): number {
+  const unlocked = SAGA_LEVELS.filter((l) => isSagaLevelUnlocked(l.id, progress));
+  const unfinished = unlocked.filter(
+    (l) => !progress.completedLevelIds?.includes(l.id) && !(progress.starsByLevel[l.id] > 0)
+  );
+  if (unfinished.length > 0) {
+    return unfinished[unfinished.length - 1].id;
+  }
+  return unlocked[unlocked.length - 1]?.id ?? 1;
+}
+
+export function applySagaLevelCompletion(
+  prev: SagaProgress,
+  levelId: number,
+  stars: 1 | 2 | 3
+): SagaProgress {
+  const level = SAGA_LEVELS.find((l) => l.id === levelId);
+  const nextIds = level ? level.nextIds : [];
+  const prevUnlocked = Array.isArray(prev.unlockedLevelIds)
+    ? prev.unlockedLevelIds
+    : [1];
+  const unlockedSet = new Set<number>([...prevUnlocked, levelId, ...nextIds]);
+  const completedSet = new Set<number>([
+    ...(Array.isArray(prev.completedLevelIds) ? prev.completedLevelIds : []),
+    levelId,
+  ]);
+  const prevStars = prev.starsByLevel[levelId] ?? 0;
+  const bestStars = Math.max(prevStars, stars) as 1 | 2 | 3;
+
+  const maxUnlocked = Math.max(
+    prev.highestUnlockedLevel || 1,
+    ...Array.from(unlockedSet)
+  );
+
+  return {
+    ...prev,
+    highestUnlockedLevel: Math.min(SAGA_LEVELS.length, maxUnlocked),
+    unlockedLevelIds: Array.from(unlockedSet).sort((a, b) => a - b),
+    completedLevelIds: Array.from(completedSet).sort((a, b) => a - b),
+    starsByLevel: {
+      ...prev.starsByLevel,
+      [levelId]: bestStars,
+    },
+  };
+}
+
 export function loadSagaProgress(): SagaProgress {
   try {
-    const raw = localStorage.getItem(SAGA_STORAGE_KEY);
+    const raw =
+      localStorage.getItem(SAGA_STORAGE_KEY) ||
+      localStorage.getItem('kale_kapmaca_saga_v1');
     if (!raw) return createInitialSagaProgress();
     const parsed = JSON.parse(raw);
+    const highest = Math.max(1, Number(parsed.highestUnlockedLevel) || 1);
+    const starsByLevel: Record<number, 1 | 2 | 3> = parsed.starsByLevel ?? {};
+    const unlockedSet = new Set<number>(
+      Array.isArray(parsed.unlockedLevelIds) ? parsed.unlockedLevelIds : [1]
+    );
+    for (let i = 1; i <= highest; i++) {
+      unlockedSet.add(i);
+    }
+    const completedSet = new Set<number>(
+      Array.isArray(parsed.completedLevelIds)
+        ? parsed.completedLevelIds
+        : Object.keys(starsByLevel).map(Number)
+    );
     return {
-      highestUnlockedLevel: Math.max(1, Number(parsed.highestUnlockedLevel) || 1),
-      starsByLevel: parsed.starsByLevel ?? {},
+      highestUnlockedLevel: highest,
+      unlockedLevelIds: Array.from(unlockedSet).sort((a, b) => a - b),
+      completedLevelIds: Array.from(completedSet).sort((a, b) => a - b),
+      starsByLevel,
       claimedMilestones: Array.isArray(parsed.claimedMilestones)
         ? parsed.claimedMilestones
         : [],

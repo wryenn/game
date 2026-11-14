@@ -3,7 +3,6 @@ import {
   Award,
   Compass,
   Home,
-  LogOut,
   Map as MapIcon,
   RotateCcw,
   Sparkles,
@@ -30,7 +29,6 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
   result,
   onPlayAgain,
   onMainMenu,
-  onQuit,
   onContinueStory,
   onOpenSagaMap,
   isOnlineGuest = false,
@@ -45,42 +43,38 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
     : [];
 
   return (
-    <div className="fixed inset-0 z-30 bg-slate-950/78 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-30 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="victory-title"
-        className="w-full max-w-xl bg-slate-950/96 border-2 border-amber-500/75 rounded-none pixel-panel p-6 md:p-7 text-amber-50 max-h-[92vh] overflow-y-auto"
+        className="w-full max-w-xl bg-zinc-950/96 rounded-3xl p-6 md:p-8 text-white max-h-[92vh] overflow-y-auto shadow-2xl"
       >
         <div className="flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-widest text-amber-400">
+          <div className="inline-flex items-center gap-2 font-display text-xs font-medium uppercase tracking-widest text-red-400">
             <Trophy className="w-4 h-4" />
             {result.sagaLevelId
-              ? `${result.sagaLevelId}. Seviye Sonucu`
-              : result.storyChapterId
-              ? 'Hikâye Karşılaşması'
-              : 'Raund Tamamlandı'}
+              ? `Level ${result.sagaLevelId} Complete`
+              : 'Round Complete'}
           </div>
 
           <h2
             id="victory-title"
-            className="font-display text-3xl md:text-4xl font-bold text-amber-300 mt-1"
+            className="font-display text-3xl md:text-4xl font-bold text-white mt-1"
           >
             {result.winnerTeam
               ? result.winnerTeam === 'A'
-                ? result.storyWon || result.sagaWon
-                  ? 'Zafer Senin!'
-                  : 'Mühür Muhafızları Kazandı'
-                : 'Rakipler Üstün Geldi'
+                ? 'Victory!'
+                : 'Defeat'
               : winner
-              ? `${winner.name} Kazandı!`
-              : 'Berabere!'}
+              ? `${winner.name} Wins!`
+              : 'Draw!'}
           </h2>
-          <p className="text-sm text-slate-300 mt-1">{result.winReason}</p>
+          <p className="text-sm text-zinc-400 mt-1">{result.winReason}</p>
 
           {/* Saga Stars Display */}
           {result.sagaLevelId !== undefined && (
-            <div className="mt-3 flex items-center gap-2 bg-slate-900 border-2 border-amber-500/60 px-4 py-2">
+            <div className="mt-3 flex items-center gap-2 bg-zinc-900 px-4 py-2 rounded-2xl">
               {[1, 2, 3].map((s) => {
                 const earned = (result.sagaStars ?? 0) >= s;
                 return (
@@ -88,8 +82,8 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
                     key={s}
                     className={`w-7 h-7 ${
                       earned
-                        ? 'fill-amber-400 text-amber-300 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]'
-                        : 'text-slate-700'
+                        ? 'fill-red-500 text-red-400'
+                        : 'text-zinc-700'
                     }`}
                   />
                 );
@@ -97,13 +91,13 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
             </div>
           )}
 
-          {/* Animated Winner Character Celebration */}
+          {/* Winner Character Celebration */}
           {winner && (
             <div className="mt-4 mb-2 flex flex-col items-center">
-              <div className="relative p-3 rounded-none bg-slate-900 border-2 border-amber-500/50">
+              <div className="relative p-3 rounded-2xl bg-zinc-900 shadow-inner">
                 <CharacterPreviewSvg
                   costume={winner.costume}
-                  size={96}
+                  size={90}
                   celebrating
                 />
               </div>
@@ -113,30 +107,30 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
 
         {/* XP & Level-Up Banner */}
         {(result.xpEarned || result.leveledUpTo) && (
-          <div className="mt-3 bg-emerald-950/60 border-2 border-emerald-500/75 p-3 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-xs font-display font-bold text-emerald-200">
-              <Sparkles className="w-4 h-4 text-emerald-400" />
-              Kazanılan Tecrübe: <span className="text-white text-sm">+{result.xpEarned ?? 0} XP</span>
+          <div className="mt-4 bg-zinc-900/80 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-xs font-display font-medium text-zinc-200">
+              <Sparkles className="w-4 h-4 text-red-400" />
+              Earned XP: <span className="text-white font-bold">+{result.xpEarned ?? 0} XP</span>
             </div>
             {result.leveledUpTo && (
-              <div className="px-2.5 py-1 bg-amber-500 border border-amber-200 text-slate-950 font-display text-xs font-bold">
-                SEVİYE ATLADIN! SV. {result.leveledUpTo}
+              <div className="px-3 py-1 bg-red-600 text-white rounded-full font-display text-xs font-semibold">
+                LEVEL UP! LV. {result.leveledUpTo}
               </div>
             )}
             {newlyUnlockedHeroes.length > 0 && (
-              <div className="w-full text-[11px] text-amber-200 font-semibold">
-                Yeni Kahraman Açıldı: {newlyUnlockedHeroes.map((h) => h.name).join(', ')}!
+              <div className="w-full text-[11px] text-zinc-400">
+                Unlocked Hero: {newlyUnlockedHeroes.map((h) => h.name).join(', ')}!
               </div>
             )}
           </div>
         )}
 
-        {/* Unlocked Achievements in this Round */}
+        {/* Unlocked Achievements */}
         {unlockedList.length > 0 && (
-          <div className="mt-3 bg-amber-500/12 border-2 border-amber-400 p-3">
-            <div className="text-[11px] font-display font-bold text-amber-300 flex items-center gap-1.5 mb-2">
-              <Award className="w-4 h-4" />
-              Bu Karşılaşmada Kazanılan Başarımlar
+          <div className="mt-3 bg-zinc-900/60 rounded-2xl p-3.5">
+            <div className="text-[11px] font-display font-medium text-zinc-300 flex items-center gap-1.5 mb-2">
+              <Award className="w-4 h-4 text-red-400" />
+              Unlocked Achievements
             </div>
             <div className="flex flex-wrap gap-2">
               {unlockedList.map((id) => {
@@ -145,7 +139,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
                 return (
                   <span
                     key={id}
-                    className="px-2.5 py-1 bg-slate-950 border border-amber-400 text-xs font-display font-bold text-white"
+                    className="px-3 py-1 bg-zinc-900 rounded-full text-xs font-display text-white"
                   >
                     {def.title}
                   </span>
@@ -156,46 +150,43 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
         )}
 
         {/* Standings Table */}
-        <div className="mt-4 border-2 border-slate-700 rounded-none overflow-hidden bg-slate-900/90">
+        <div className="mt-4 rounded-2xl overflow-hidden bg-zinc-900/60 border border-zinc-800">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b-2 border-slate-700 text-slate-400">
-                <th className="py-2.5 px-3 font-semibold">Sıra</th>
-                <th className="py-2.5 px-3 font-semibold">Savaşçı</th>
-                <th className="py-2.5 px-3 font-semibold text-right text-amber-300">Puan</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Ezme</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Düşürme</th>
-                <th className="py-2.5 px-3 font-semibold text-right">Düşüş</th>
+              <tr className="border-b border-zinc-800 text-zinc-400">
+                <th className="py-2.5 px-3 font-medium">Rank</th>
+                <th className="py-2.5 px-3 font-medium">Fighter</th>
+                <th className="py-2.5 px-3 font-medium text-right text-red-400">Score</th>
+                <th className="py-2.5 px-3 font-medium text-right">Stomps</th>
+                <th className="py-2.5 px-3 font-medium text-right">KOs</th>
+                <th className="py-2.5 px-3 font-medium text-right">Falls</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-zinc-800/60">
               {result.standings.map((p, idx) => {
                 const theme = CHARACTER_COLORS[p.colorId];
                 return (
                   <tr key={p.slotIndex}>
-                    <td className="py-2.5 px-3 font-display font-bold text-amber-300">
+                    <td className="py-2.5 px-3 font-display font-semibold text-white">
                       #{idx + 1}
                     </td>
-                    <td className="py-2.5 px-3 font-semibold text-white flex items-center gap-2">
+                    <td className="py-2.5 px-3 font-medium text-white flex items-center gap-2">
                       <span
-                        className="w-3 h-3 rounded-none border border-black/50 inline-block shrink-0"
+                        className="w-3 h-3 rounded-full inline-block shrink-0"
                         style={{ backgroundColor: theme.primary }}
                       />
                       <span className="font-display">{p.name}</span>
-                      <span className="text-[11px] text-slate-400">
-                        ({p.isBot ? `B${p.slotIndex + 1}` : `O${p.slotIndex + 1}`})
-                      </span>
                     </td>
-                    <td className="py-2.5 px-3 font-mono-num text-right text-amber-300 font-extrabold">
+                    <td className="py-2.5 px-3 font-mono text-right text-red-400 font-bold">
                       {p.score}
                     </td>
-                    <td className="py-2.5 px-3 font-mono-num text-right text-emerald-300">
+                    <td className="py-2.5 px-3 font-mono text-right text-zinc-300">
                       {p.stomps}
                     </td>
-                    <td className="py-2.5 px-3 font-mono-num text-right text-sky-300">
+                    <td className="py-2.5 px-3 font-mono text-right text-zinc-300">
                       {p.kills}
                     </td>
-                    <td className="py-2.5 px-3 font-mono-num text-right text-slate-400">
+                    <td className="py-2.5 px-3 font-mono text-right text-zinc-500">
                       {p.deaths}
                     </td>
                   </tr>
@@ -205,60 +196,48 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
           </table>
         </div>
 
-        {/* Actions */}
-        <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        {/* Actions (No Quit button) */}
+        <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
           {result.sagaLevelId && onOpenSagaMap ? (
             <button
               type="button"
               onClick={onOpenSagaMap}
-              data-start="true"
-              className="py-3 px-4 rounded-none bg-amber-500 hover:bg-amber-400 border-2 border-amber-200 text-slate-950 font-display font-bold text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-colors pixel-btn"
+              className="py-3 px-4 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-display font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-95 shadow-lg shadow-red-600/20"
             >
               <MapIcon className="w-4 h-4" />
-              Haritaya Dön
+              Saga Map
             </button>
           ) : result.storyChapterId && result.storyWon && onContinueStory ? (
             <button
               type="button"
               onClick={onContinueStory}
-              data-start="true"
-              className="py-3 px-4 rounded-none bg-amber-500 hover:bg-amber-400 border-2 border-amber-200 text-slate-950 font-display font-bold text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-colors pixel-btn"
+              className="py-3 px-4 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-display font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-95 shadow-lg shadow-red-600/20"
             >
               <Compass className="w-4 h-4" />
-              Hikâyeye Devam
+              Continue
             </button>
           ) : !isOnlineGuest ? (
             <button
               type="button"
               onClick={onPlayAgain}
-              data-start="true"
-              className="py-3 px-4 rounded-none bg-amber-500 hover:bg-amber-400 border-2 border-amber-200 text-slate-950 font-display font-bold text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-colors pixel-btn"
+              className="py-3 px-4 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-display font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-95 shadow-lg shadow-red-600/20"
             >
               <RotateCcw className="w-4 h-4" />
-              Tekrar Oyna
+              Play Again
             </button>
           ) : (
-            <div className="py-3 px-3 bg-slate-900 border-2 border-slate-700 text-[11px] text-slate-300 flex items-center justify-center text-center">
-              Oda sahibi bekleniyor...
+            <div className="py-3 px-3 bg-zinc-900 rounded-2xl text-xs text-zinc-400 flex items-center justify-center text-center">
+              Waiting for host...
             </div>
           )}
 
           <button
             type="button"
             onClick={onMainMenu}
-            className="py-3 px-4 rounded-none bg-slate-900 hover:bg-slate-800 border-2 border-slate-600 text-amber-100 font-display font-bold text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-colors pixel-btn"
+            className="py-3 px-4 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 font-display font-medium text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-colors"
           >
             <Home className="w-4 h-4" />
-            Ana Menü
-          </button>
-
-          <button
-            type="button"
-            onClick={onQuit}
-            className="py-3 px-4 rounded-none bg-rose-950/90 hover:bg-rose-900 border-2 border-rose-500 text-rose-100 font-display font-bold text-sm inline-flex items-center justify-center gap-2 cursor-pointer transition-colors pixel-btn"
-          >
-            <LogOut className="w-4 h-4" />
-            Çıkış
+            Main Menu
           </button>
         </div>
       </div>

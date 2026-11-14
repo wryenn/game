@@ -166,10 +166,10 @@ export const AI_PERSONALITIES: {
   label: string;
   desc: string;
 }[] = [
-  { id: 'aggressive', label: 'Agresif', desc: 'Sürekli rakibin kafasına atlar' },
-  { id: 'defensive', label: 'Savunmacı', desc: 'Merkezde kalır, tuzaktan kaçar' },
-  { id: 'balanced', label: 'Dengeli', desc: 'Fırsat kollayıp hamle yapar' },
-  { id: 'chaotic', label: 'Kaotik', desc: 'Beklenmedik zıplama ve itişler' },
+  { id: 'aggressive', label: 'Aggressive', desc: 'Sürekli rakibin kafasına atlar' },
+  { id: 'defensive', label: 'Defensive', desc: 'Merkezde kalır, tuzaktan kaçar' },
+  { id: 'balanced', label: 'Balanced', desc: 'Fırsat kollayıp hamle yapar' },
+  { id: 'chaotic', label: 'Random', desc: 'Beklenmedik zıplama ve itişler' },
 ];
 
 export interface GameModeMeta {
@@ -467,7 +467,7 @@ export const DEFAULT_SLOTS: PlayerSlotConfig[] = [
   {
     slotIndex: 1,
     kind: 'bot',
-    name: 'Tıknaz Ali',
+    name: 'Bot 1',
     team: 'B',
     aiPersonality: 'aggressive',
     heroId: 'tiknaz',
@@ -480,8 +480,8 @@ export const DEFAULT_SLOTS: PlayerSlotConfig[] = [
   },
   {
     slotIndex: 2,
-    kind: 'bot',
-    name: 'Murat',
+    kind: 'off',
+    name: 'Bot 2',
     team: 'A',
     aiPersonality: 'defensive',
     heroId: 'pofi',
@@ -494,8 +494,8 @@ export const DEFAULT_SLOTS: PlayerSlotConfig[] = [
   },
   {
     slotIndex: 3,
-    kind: 'bot',
-    name: 'Hayri',
+    kind: 'off',
+    name: 'Bot 3',
     team: 'B',
     aiPersonality: 'chaotic',
     heroId: 'tiknaz',

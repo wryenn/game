@@ -382,7 +382,14 @@ export interface PlayerProgression {
   totalKills: number;
 }
 
-// Candy-Crush Style Saga Map
+// Candy-Crush Style Branching Saga Map
+export type SagaBranchKind = 'main' | 'side' | 'boss';
+
+export interface SagaMapPos {
+  x: number; // 18..82 percentage across map width
+  row: number; // 0..10 tier from bottom to top
+}
+
 export interface SagaLevelDef {
   id: number; // 1..15
   title: string;
@@ -393,6 +400,10 @@ export interface SagaLevelDef {
   lives: number;
   roundDurationSec?: number;
   isBoss?: boolean;
+  branchKind: SagaBranchKind;
+  branchLabel?: string;
+  nextIds: number[];
+  mapPos: SagaMapPos;
   objectiveText: string;
   star2Hint: string;
   star3Hint: string;
@@ -414,6 +425,8 @@ export interface SagaLevelDef {
 
 export interface SagaProgress {
   highestUnlockedLevel: number;
+  unlockedLevelIds: number[];
+  completedLevelIds: number[];
   starsByLevel: Record<number, 1 | 2 | 3>;
   claimedMilestones: number[];
 }

@@ -3,6 +3,7 @@ import { LogOut, RotateCcw } from 'lucide-react';
 import { GameHud } from './components/GameHud';
 import { MainMenu } from './components/MainMenu';
 import { PauseModal } from './components/PauseModal';
+import { SplashIntro } from './components/SplashIntro';
 import { VictoryModal } from './components/VictoryModal';
 import {
   evaluateLiveAchievements,
@@ -34,6 +35,7 @@ import {
 } from './game/physics';
 import { CastleRenderer } from './game/renderer';
 import {
+  applySagaLevelCompletion,
   computeSagaStarsEarned,
   loadSagaProgress,
   SAGA_LEVELS,
@@ -79,16 +81,29 @@ function loadSavedState(): { settings: GameSettings; slots: PlayerSlotConfig[] }
     const savedControls = parsed.settings?.controls ?? {};
     const savedSlots: PlayerSlotConfig[] =
       Array.isArray(parsed.slots) && parsed.slots.length === 4
-        ? parsed.slots.map((s: PlayerSlotConfig, idx: number) => ({
-            ...DEFAULT_SLOTS[idx],
-            ...s,
-            heroId: s.heroId ?? DEFAULT_SLOTS[idx].heroId ?? 'pofi',
-            costume: {
-              ...DEFAULT_SLOTS[idx].costume,
-              ...(s.costume ?? {}),
-              accessoryId: s.costume?.accessoryId ?? 'yok',
-            },
-          }))
+        ? parsed.slots.map((s: PlayerSlotConfig, idx: number) => {
+            const def = DEFAULT_SLOTS[idx];
+            const isBot = s.kind === 'bot';
+            const name =
+              isBot &&
+              (s.name === 'Tıknaz Ali' ||
+                s.name === 'Murat' ||
+                s.name === 'Hayri' ||
+                s.name.startsWith('Bot'))
+                ? `Bot ${idx}`
+                : s.name ?? def.name;
+            return {
+              ...def,
+              ...s,
+              name,
+              heroId: s.heroId ?? def.heroId ?? 'pofi',
+              costume: {
+                ...def.costume,
+                ...(s.costume ?? {}),
+                accessoryId: s.costume?.accessoryId ?? 'yok',
+              },
+            };
+          })
         : DEFAULT_SLOTS;
 
     return {
@@ -252,9 +267,19 @@ function buildSagaSlots(
 
 export default function App() {
   const initial = useRef(loadSavedState());
+  const urlSearchParams = useRef(new URLSearchParams(window.location.search));
   const urlRoomParam = useRef(
-    new URLSearchParams(window.location.search).get('room')?.trim().toUpperCase() ?? ''
+    urlSearchParams.current.get('room')?.trim().toUpperCase() ?? ''
   );
+  const urlAutostart = urlSearchParams.current.get('autostart') === '1';
+
+  const [showSplash, setShowSplash] = useState<boolean>(
+    !urlAutostart && !urlRoomParam.current
+  );
+  const showSplashRef = useRef<boolean>(showSplash);
+  useEffect(() => {
+    showSplashRef.current = showSplash;
+  }, [showSplash]);
 
   const [settings, setSettings] = useState<GameSettings>(initial.current.settings);
   const [slots, setSlots] = useState<PlayerSlotConfig[]>(initial.current.slots);
@@ -486,21 +511,10 @@ export default function App() {
           const levelId = rawResult.sagaLevelId;
           const levelDef = SAGA_LEVELS.find((l) => l.id === levelId);
           sagaBonusXp = levelDef?.rewardXp ?? 80;
-          setSagaProgress((prev) => {
-            const prevStars = prev.starsByLevel[levelId] ?? 0;
-            const nextStars = Math.max(prevStars, sagaStars ?? 1) as 1 | 2 | 3;
-            return {
-              ...prev,
-              highestUnlockedLevel: Math.max(
-                prev.highestUnlockedLevel,
-                Math.min(SAGA_LEVELS.length, levelId + 1)
-              ),
-              starsByLevel: {
-                ...prev.starsByLevel,
-                [levelId]: nextStars,
-              },
-            };
-          });
+          const earnedStars = Math.max(1, sagaStars ?? 1) as 1 | 2 | 3;
+          setSagaProgress((prev) =>
+            applySagaLevelCompletion(prev, levelId, earnedStars)
+          );
         }
       }
 
@@ -796,7 +810,7 @@ export default function App() {
 
   const pauseGame = useCallback(() => {
     if (screenStateRef.current !== 'playing') return;
-    soundEngine.playMenuClick();
+    soundEngine.playPause();
     soundEngine.stopMusic();
     inputHubRef.current?.clearAll();
     screenStateRef.current = 'paused';
@@ -810,7 +824,7 @@ export default function App() {
       document.activeElement.blur();
     }
     soundEngine.unlock();
-    soundEngine.playMenuClick();
+    soundEngine.playResume();
     soundEngine.startMusic();
     inputHubRef.current?.clearAll();
     screenStateRef.current = 'playing';
@@ -955,6 +969,7 @@ export default function App() {
       }
 
       if (screenStateRef.current === 'title') {
+        if (showSplashRef.current) return;
         if (
           menuSubViewRef.current === 'home' &&
           (e.code === 'Enter' || e.code === 'Space')
@@ -1203,8 +1218,13 @@ export default function App() {
         className="block w-full h-full outline-none pixel-canvas"
       />
 
+      {/* Studio Intro ("dripfore") */}
+      {showSplash && screenState === 'title' && (
+        <SplashIntro onComplete={() => setShowSplash(false)} />
+      )}
+
       {/* Title Screen & Sub-menus */}
-      {screenState === 'title' && (
+      {screenState === 'title' && !showSplash && (
         <MainMenu
           subView={menuSubView}
           settings={settings}

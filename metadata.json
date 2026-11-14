@@ -1,6 +1,6 @@
 {
-  "name": "Kale Kapmaca",
-  "description": "Fesli ve bıyıklı karakterlerin devasa bir Osmanlı kalesinde birbirlerini platform dışına atmaya çalıştığı, 1-4 oyunculu fizik tabanlı 2D platform parti oyunu.",
+  "name": "Dripratör",
+  "description": "Dripratör - A minimalist 2D physics party platformer where gelatinous characters battle on Ottoman castle battlements.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

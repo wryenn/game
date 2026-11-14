@@ -70,3 +70,123 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Studio Intro ("dripfore") Compositor Animations */
+@keyframes dripDropFall {
+  0% {
+    transform: translateY(-44px) scaleY(1.25) scaleX(0.8);
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0px) scaleY(1.1) scaleX(0.9);
+  }
+  70% {
+    transform: translateY(4px) scaleY(0.65) scaleX(1.35);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(2px) scaleY(0) scaleX(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes dripRipple {
+  0% {
+    transform: scale(0.35);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+}
+
+@keyframes dripLetterReveal {
+  0% {
+    transform: translateY(16px) scale(0.85);
+    opacity: 0;
+  }
+  70% {
+    transform: translateY(-3px) scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dripFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-drip-drop {
+  animation: dripDropFall 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-drip-ripple {
+  animation: dripRipple 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.42s both;
+}
+
+.animate-drip-letter {
+  animation: dripLetterReveal 0.46s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Saga Branching Map Animations */
+@keyframes sagaRoadMarch {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sagaMascotHop {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1, 1);
+  }
+  45% {
+    transform: translateY(-7px) scale(0.95, 1.06);
+  }
+  65% {
+    transform: translateY(0px) scale(1.06, 0.94);
+  }
+}
+
+@keyframes sagaNodePop {
+  0% {
+    transform: scale(0.92);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.saga-road-active {
+  stroke-dasharray: 8 4;
+  animation: sagaRoadMarch 1.1s linear infinite;
+}
+
+.saga-mascot-hop {
+  animation: sagaMascotHop 1.35s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.saga-node-selected {
+  animation: sagaNodePop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+

@@ -113,6 +113,15 @@ export class CastleRenderer {
   private particleCursor = 0;
   private popups: FloatingPopup[];
   private popupCursor = 0;
+  private atmosphericParticles: {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    size: number;
+    alpha: number;
+    driftFreq: number;
+  }[];
 
   private pixelBuffer: HTMLCanvasElement;
   private pctx: CanvasRenderingContext2D;
@@ -143,6 +152,16 @@ export class CastleRenderer {
       maxLife: 0.9,
       text: '+10',
       color: '#FDE047',
+    }));
+
+    this.atmosphericParticles = Array.from({ length: 55 }, (_, i) => ({
+      x: (i * 31) % PW,
+      y: (i * 19) % PH,
+      vx: (Math.random() - 0.5) * 6,
+      vy: -1.5 - Math.random() * 3,
+      size: i % 4 === 0 ? 2 : 1,
+      alpha: 0.08 + Math.random() * 0.16,
+      driftFreq: 0.8 + Math.random() * 1.5,
     }));
 
     this.pixelBuffer = document.createElement('canvas');
@@ -425,6 +444,9 @@ export class CastleRenderer {
     if (sim.windForce !== 0) {
       this.drawPixelWindStreaks(pctx, sim.windForce, timeSec);
     }
+
+    // 3.5. Slow-moving atmospheric castle fog & dust motes
+    this.drawAtmosphericFog(pctx, timeSec);
 
     // 4. Pixel platforms
     for (const plat of sim.platforms) {
@@ -1579,5 +1601,18 @@ export class CastleRenderer {
       ctx.fillStyle = '#0C4A6E';
       ctx.fillRect(x, wy + 4, 4, PH - wy);
     }
+  }
+
+  private drawAtmosphericFog(ctx: CanvasRenderingContext2D, timeSec: number) {
+    ctx.save();
+    for (const ap of this.atmosphericParticles) {
+      const px = ap.x + Math.sin(timeSec * ap.driftFreq + ap.y * 0.05) * 6;
+      const py = ap.y + Math.cos(timeSec * 0.8 + ap.x * 0.05) * 4;
+      const alpha = ap.alpha * (0.6 + 0.4 * Math.sin(timeSec * 1.8 + ap.x));
+      ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+      ctx.fillStyle = '#FEF3C7'; // warm castle fog/dust mote
+      ctx.fillRect(Math.round(((px % PW) + PW) % PW), Math.round(((py % PH) + PH) % PH), ap.size, ap.size);
+    }
+    ctx.restore();
   }
 }

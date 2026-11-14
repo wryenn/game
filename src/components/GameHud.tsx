@@ -96,44 +96,60 @@ export const GameHud: React.FC<GameHudProps> = ({
               ? 100
               : Math.max(0, Math.min(100, ((abMax - p.abilityCooldown) / abMax) * 100));
 
+            const displayName = p.isBot
+              ? p.name.startsWith('Bot ')
+                ? p.name
+                : `Bot ${p.slotIndex}`
+              : p.name;
+
             return (
               <div
                 key={p.slotIndex}
                 data-testid={`hud-player-${p.slotIndex}`}
-                className={`px-2.5 py-1.5 rounded-none border-2 flex items-center gap-2.5 transition-opacity pixel-panel min-w-[175px] ${
+                className={`px-2.5 py-1.5 rounded-none border-2 flex items-center gap-2 transition-all pixel-panel min-w-[155px] ${
                   p.eliminated
-                    ? 'bg-slate-950/75 border-slate-800 opacity-45'
+                    ? 'bg-slate-950/70 border-slate-800 opacity-40'
                     : p.shielded
-                    ? 'bg-slate-950/95 border-sky-400'
-                    : 'bg-slate-950/92 border-amber-500/65'
+                    ? 'bg-slate-950/92 border-sky-400 shadow-md shadow-sky-500/20'
+                    : 'bg-slate-950/92'
                 }`}
+                style={{
+                  borderColor: p.eliminated
+                    ? '#334155'
+                    : p.shielded
+                    ? '#38bdf8'
+                    : theme.primary,
+                }}
               >
                 {/* Mini Pixel Avatar + Tag */}
                 <div className="relative shrink-0 flex flex-col items-center">
                   <div
-                    className="w-10 h-10 bg-slate-900 border-2 flex items-center justify-center overflow-hidden"
+                    className="w-8 h-8 bg-slate-900 border flex items-center justify-center overflow-hidden"
                     style={{ borderColor: theme.primary }}
                   >
-                    <CharacterPreviewSvg costume={p.costume} size={36} />
+                    <CharacterPreviewSvg costume={p.costume} size={30} />
                   </div>
                   <span
-                    className=" -mt-1.5 px-1 text-[9px] font-display font-bold text-white border border-black"
+                    className="-mt-1 px-1 text-[8px] font-display font-bold text-white border border-black shadow"
                     style={{ backgroundColor: theme.secondary }}
                   >
-                    {p.isBot ? `B${p.slotIndex + 1}` : `O${p.slotIndex + 1}`}
+                    {p.isBot ? `B${p.slotIndex}` : `P1`}
                   </span>
                 </div>
 
                 {/* Health Bar, Hearts, Ability Cooldown & Score */}
                 <div className="flex-1 min-w-0 leading-tight">
-                  <div className="flex items-center justify-between gap-1.5">
+                  <div className="flex items-center justify-between gap-1 mb-1">
                     <div className="flex items-center gap-1 min-w-0">
-                      <span className="font-display text-xs font-bold text-amber-50 truncate max-w-[78px]">
-                        {p.name}
+                      <span
+                        className="font-display text-xs font-bold truncate max-w-[72px]"
+                        style={{ color: theme.light }}
+                      >
+                        {displayName}
                       </span>
                       {hud.mode === 'team' && (
                         <span
-                          className={`text-[9px] font-bold px-1 border ${
+                          className={`text-[8px] font-bold px-0.5 border ${
                             p.team === 'A'
                               ? 'text-red-300 border-red-500 bg-red-950'
                               : 'text-blue-300 border-blue-500 bg-blue-950'
@@ -148,97 +164,71 @@ export const GameHud: React.FC<GameHudProps> = ({
                     </span>
                   </div>
 
-                  {/* Vitality Bar + Hearts */}
+                  {/* Ultra-Slim Vitality Bar or Stomps */}
                   {showLivesBar ? (
-                    <div className="mt-1">
-                      <div className="flex items-center justify-between gap-1 mb-0.5">
-                        <div className="flex items-center gap-0.5">
-                          {p.eliminated ? (
-                            <span className="text-[10px] font-display font-bold text-rose-400">
-                              ELENDİ
-                            </span>
-                          ) : (
-                            Array.from({ length: maxLives }).map((_, i) => {
-                              const filled = i < p.lives;
-                              return (
-                                <Heart
-                                  key={i}
-                                  className={`w-2.5 h-2.5 ${
-                                    filled
-                                      ? 'fill-rose-500 text-rose-400 drop-shadow-[0_0_3px_rgba(244,63,94,0.8)]'
-                                      : 'fill-slate-800 text-slate-700'
-                                  }`}
-                                />
-                              );
-                            })
-                          )}
-                        </div>
-                        {!p.eliminated && (
-                          <span className="text-[9px] font-mono-num text-slate-300">
-                            {p.lives}/{maxLives}
-                          </span>
-                        )}
-                      </div>
-                      {/* Segmented Vitality Bar */}
-                      <div
-                        className="w-full h-1.5 bg-slate-900 border border-slate-700 overflow-hidden"
-                        aria-label={`${p.name} Can Barı: ${p.lives}/${maxLives}`}
-                      >
+                    <div className="flex items-center justify-between gap-1.5 mt-0.5">
+                      {p.eliminated ? (
+                        <span className="text-[8px] font-display font-bold text-rose-400">
+                          ELENDİ
+                        </span>
+                      ) : (
                         <div
-                          className={`h-full transition-all duration-200 ${barColor}`}
-                          style={{ width: `${healthPct}%` }}
-                        />
-                      </div>
+                          className="flex-1 min-w-0"
+                          aria-label={`${displayName} Can: ${p.lives}/${maxLives}`}
+                        >
+                          <div className="w-full h-1 bg-slate-900 border border-slate-800 overflow-hidden">
+                            <div
+                              className="h-full transition-all duration-150"
+                              style={{
+                                width: `${healthPct}%`,
+                                backgroundColor: theme.primary,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Micro Status & Ability Pip */}
+                      {!p.eliminated && (
+                        <div className="flex items-center gap-1 shrink-0">
+                          {p.shielded && (
+                            <span title="Kalkan">
+                              <Shield className="w-2.5 h-2.5 text-sky-300" />
+                            </span>
+                          )}
+                          {p.stunned && (
+                            <span className="text-[8px] font-display font-bold text-amber-400">
+                              S
+                            </span>
+                          )}
+                          <div
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              abReady
+                                ? 'bg-cyan-400 ring-1 ring-cyan-200'
+                                : 'bg-slate-700'
+                            }`}
+                            title={
+                              abReady
+                                ? `Yetenek Hazır [${abilityKeyLabel}]`
+                                : `${p.abilityCooldown.toFixed(1)}s`
+                            }
+                          />
+                        </div>
+                      )}
                     </div>
                   ) : (
-                    <div className="text-[10px] font-mono-num font-bold text-emerald-300 mt-0.5">
+                    <div className="text-[9px] font-mono-num font-bold text-emerald-300">
                       {p.stomps} Ezme · {p.kills} Eleme
                     </div>
                   )}
 
-                  {/* Special Ability Bar + Status Pills */}
-                  {!p.eliminated && (
-                    <div className="mt-1 flex items-center gap-1.5">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-1.5 text-[9px] mb-0.5">
-                          <span className="text-slate-400 truncate max-w-[66px]">
-                            {hero.abilityName}
-                          </span>
-                          <span
-                            className={`font-display font-bold shrink-0 ${
-                              abReady ? 'text-cyan-300' : 'text-slate-400'
-                            }`}
-                          >
-                            {abReady
-                              ? p.slotIndex === 0 && !p.isBot
-                                ? `HAZIR [${abilityKeyLabel}]`
-                                : 'HAZIR'
-                              : `${p.abilityCooldown.toFixed(1)}s`}
-                          </span>
-                        </div>
-                        <div className="w-full h-1 bg-slate-900 border border-slate-800">
-                          <div
-                            className={`h-full transition-all ${
-                              abReady ? 'bg-cyan-400' : 'bg-amber-500/70'
-                            }`}
-                            style={{ width: `${abFillPct}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      {p.shielded && (
-                        <span
-                          title="Kalkan Aktif"
-                          className="px-1 py-0.5 bg-sky-900 border border-sky-400 text-sky-200 text-[9px] font-bold inline-flex items-center"
-                        >
-                          <Shield className="w-2.5 h-2.5" />
-                        </span>
-                      )}
-                      {p.stunned && (
-                        <span className="px-1 py-0.5 bg-amber-900 border border-amber-400 text-amber-200 text-[9px] font-display font-bold">
-                          SERSEM
-                        </span>
-                      )}
+                  {/* Micro Ability Recharge Line */}
+                  {!p.eliminated && !abReady && (
+                    <div className="w-full h-0.5 bg-slate-900 mt-0.5 overflow-hidden">
+                      <div
+                        className="h-full bg-cyan-400/80 transition-all"
+                        style={{ width: `${abFillPct}%` }}
+                      />
                     </div>
                   )}
                 </div>
@@ -358,21 +348,6 @@ export const GameHud: React.FC<GameHudProps> = ({
             className="w-9 h-9 rounded-none bg-slate-950/92 hover:bg-slate-800 border-2 border-amber-500/50 text-amber-100 flex items-center justify-center cursor-pointer transition-colors pixel-btn"
           >
             <Pause className="w-4 h-4" />
-          </button>
-
-          <button
-            type="button"
-            tabIndex={-1}
-            aria-label="Maçtan Çık"
-            title="Ana Menüye Çık"
-            onClick={(e) => {
-              e.currentTarget.blur();
-              onQuit();
-            }}
-            className="h-9 px-2.5 rounded-none bg-rose-950/92 hover:bg-rose-900 border-2 border-rose-500/80 text-rose-100 font-display font-bold text-xs inline-flex items-center gap-1 cursor-pointer transition-colors pixel-btn"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">Çıkış</span>
           </button>
         </div>
       </div>
